@@ -1,0 +1,50 @@
+{% extends 'master.html' %} {% load static %} {% block title %} Account List
+{%endblock %} {% block content %}
+<h1>Account List</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <br />
+      <p>For any inquiries, please contact us at:</p>
+      <p>Email: <a href="mailto:www.yahoo.com">frekiki@yahoo.com</a></p>
+      <p>Phone: <a href="tel:+254708419101">+254708419101</a></p>
+      <p>WhatsApp: <a href="https://wa.me/254708419101">+254708419101</a></p>
+
+      <br />
+      <br />
+      <p>Mpesa Account <a href="tel:+254708419101">+254708419101</a></p>
+
+      <table border="1" class="table table-striped table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th>Account Number</th>
+            <th>Account Type</th>
+            <th>Member</th>
+            <th>Balance</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for account in accounts %}
+          <tr>
+            <td>{{ account.account_number }}</td>
+            <td>{{ account.get_account_type_display }}</td>
+            <td>{{ account.member }}</td>
+            <td>{{ account.current_balance }}</td>
+            <td>
+              <a
+                href="{% url 'accounts:deposit' account.id %}"
+                class="btn btn-sm btn-info"
+                >View</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Add New Account Button -->
+
+  {% endblock %}
+</div>

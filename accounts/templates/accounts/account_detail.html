@@ -1,0 +1,39 @@
+{% extends 'master.html' %}
+
+{% block content %}
+<div class="account-header">
+    <h2>{{ account.account_number }} - {{ account.get_account_type_display }}</h2>
+    <p>Member: {{ account.member }}</p>
+    <p>Balance: {{ account.current_balance }}</p>
+    <p>Interest Rate: {{ account.interest_rate }}%</p>
+</div>
+
+<div class="transaction-actions">
+    <a href="{% url 'accounts:deposit' account.id %}" class="btn btn-primary">Deposit</a>
+    <a href="{% url 'accounts:withdraw' account.id %}" class="btn btn-warning">Withdraw</a>
+</div>
+
+<h3>Transaction History</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Reference</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.transaction_date }}</td>
+            <td>{{ transaction.get_transaction_type_display }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.description }}</td>
+            <td>{{ transaction.reference_number }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

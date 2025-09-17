@@ -1,0 +1,142 @@
+{% extends 'master.html' %} 
+
+
+
+{% block content %}
+<div class="account-header">
+  <h2>{{ account.account_number }} - {{ account.get_account_type_display }}</h2>
+  <p>Member: {{ account.member }}</p>
+  <p>Balance: Kshs {{ account.current_balance }}</p>
+</div>
+<div class="col-md-6">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Deposits</h5>
+                    <p class="card-text fs-4">Ksh {{ account.current_balance|floatformat:2 }}</p>
+                </div>
+            </div>
+        </div>
+
+                <div class="col-md-6">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Total Withdrawals</h5>
+                    <p class="card-text fs-4">Ksh{{ account.current_withdraws|floatformat:2 }}</p>
+                </div>
+            </div>
+        </div>
+
+<br />
+
+<h3>Transaction History</h3>
+
+<div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Recent Transactions</h5>
+            <span class="badge bg-primary">{{ transactions.paginator.count }} transactions</span>
+        </div>
+        
+        <div class="card-body">
+            {% if transactions %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Reference</th>
+                            <th>Type</th>
+                            <th class="text-end">Amount (Ksh)</th>
+                            <th>Processed By</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transactions.transaction_date|date:"M d, Y H:i" }}</td>
+                            <td>
+                                <small class="text-muted">{{ transaction.reference_number }}</small>
+                            </td>
+                            <td>
+                                <span class="badge {% if transaction.transaction_type == 'DEP' %}bg-success{% else %}bg-danger{% endif %}">
+                                    {{ transaction.get_transaction_type_display }}
+                                </span>
+                            </td>
+                            <td class="text-end {% if transaction.transaction_type == 'DEP' %}text-success{% else %}text-danger{% endif %}">
+                                {% if transaction.transaction_type == 'DEP' %}+{% else %}-{% endif %}
+                                {{ transaction.amount|floatformat:2 }}
+                            </td>
+                            <td>{{ transaction.processed_by.get_full_name|default:transaction.processed_by.username }}</td>
+                            <td>{{ transaction.description|default:"-" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if transactions.has_other_pages %}
+            <nav aria-label="Transaction pagination">
+                <ul class="pagination justify-content-center">
+                    {% if transactions.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">&laquo;&laquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ transactions.previous_page_number }}">&laquo;</a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in transactions.paginator.page_range %}
+                        {% if transactions.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > transactions.number|add:'-3' and num < transactions.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if transactions.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ transactions.next_page_number }}">&raquo;</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ transactions.paginator.num_pages }}">&raquo;&raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                <h5 class="text-muted">No transactions found</h5>
+                <p class="text-muted">This account has no transaction history yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+      <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+        <a
+          href="{% url 'accounts:account_list'  %}"
+          class="btn btn-secondary"
+        >
+          <i class="bi bi-arrow-left"></i> Back to Account
+        </a>
+        <button class="btn btn-outline-primary ms-2" onclick="window.print()">
+            <i class="fas fa-print"></i> Print Statement
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
