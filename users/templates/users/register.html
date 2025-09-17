@@ -1,0 +1,70 @@
+{% extends 'master.html' %}
+
+{% block title %}
+Register a New User
+{% endblock %}
+
+
+{% block content %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if messages.tags == 'error' %}
+            <center><h4 style="color: firebrick;">{{message}}</h4></center>
+        {% else %}
+            <center><h4 style="color: dodgerblue;">{{message}}</h4></center>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<h1>Register a New User</h1>
+<div class="card-body">
+<form class="form"  method="POST" action="{% url 'users:register' %}">
+    {% csrf_token %}
+   <div class="txt_field">
+            <input type="text" required name="first_name">
+            <span></span>
+            <label>First Name</label>
+          </div>
+
+          <div class="txt_field">
+            <input type="text" required name="last_name">
+            <span></span>
+            <label>Last Name</label>
+          </div>
+
+        <div class="txt_field">
+          <input type="text" required name="username">
+          <span></span>
+          <label>Username</label>
+        </div>
+
+        <div class="txt_field">
+            <input type="email" required name="email">
+            <span></span>
+            <label>Email</label>
+          </div>
+
+        <div class="txt_field">
+          <input type="password" required name="password">
+          <span></span>
+          <label>Password</label>
+        </div>    
+
+        <!-- <div class="pass">Forgot Password?</div> -->
+        <input type="submit" value="Register">
+</form>
+{% if form.non_field_errors %}
+    <div class="error">
+        {{ form.non_field_errors }}
+    </div>
+{% endif %}
+<br>
+
+<div class="signup_link">
+    <p>You are already logged in as {{ user.username }}.</p>
+    <p>Already have an account, you can <a href="{% url 'users:login' %}">log in here</a>.</p>
+</div>
+
+</div>
+
+{% endblock %}
