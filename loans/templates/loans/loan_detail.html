@@ -1,0 +1,88 @@
+{% extends 'master.html' %} {% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h1>Loan #{{loan.id}}</h1>
+    <div class="card-mb-4">
+      <div class="card-body">
+        <dl class="row">
+          <dt class="col-sm-5">Principal Amount:</dt>
+          <dd class="col-sm-7">Kshs {{ loan.amount }}</dd>
+
+          <dt class="col-sm-5">Interest Rate:</dt>
+          <dd class="col-sm-7">{{ loan.interest_rate }}%</dd>
+
+          <dt class="col-sm-5">Term:</dt>
+          <dd class="col-sm-7">{{ loan.term_months }} months</dd>
+
+          <dt class="col-sm-5">Total Interest:</dt>
+          <dd class="col-sm-7">Kshs {{ loan.total_interest|floatformat:2 }}</dd>
+
+          <dt class="col-sm-5">Current Balance:</dt>
+          <dd class="col-sm-7">Kshs {{ loan.balance|floatformat:2 }}</dd>
+
+          <dt class="col-sm-5">Status:</dt>
+          <dd class="col-sm-7">{{ loan.get_status_display }}</dd>
+        </dl>
+      </div>
+    </div>
+    <h3>Make Payment</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="amount">Payment Amount:</label>
+        {{ form.amount }}
+        <small class="form-text text-muted"
+          >minimum: Kshs {{ loan.monthly_payment|floatformat:2}}
+        </small>
+      </div>
+      <button type="submit" class="btn btn-success">Submit Payment</button>
+    </form>
+  </div>
+  <div class="col-md-6">
+    <h3>Payment History</h3>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>Balance</th>
+          <th>Payment Method</th>
+          <th>Status</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for repayment in repayments %}
+        <tr>
+          <td>{{ repayment.payment_date|date:"m.d.y" }}</td>
+          <td>Kshs {{ repayment.amount|floatformat:2 }}</td>
+          <td>Kshs {{ loan.balance|floatformat:2 }}</td>
+          <td>{{ repayment.get_payment_method_display }}</td>
+          <td>{{ repayment.get_type_display }}</td>
+          <td>
+            {% if repayment.is_penalty %}Penalty{% else %}Regular{% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3">No payments made yet.</td>
+        </tr>
+        <button class="btn btn-outline-primary ms-2" onclick="window.print()">
+          <i class="fas fa-print"></i> Print Statement
+        </button>
+        <button
+          class="btn btn-outline-primary ms-2"
+          onclick="window.download()"
+        >
+          <i class="fas fa-print"></i> download Statement
+        </button>
+        <a href="{% url 'loans:loan_list'  %}" class="btn btn-secondary">
+          <i class="bi bi-arrow-left"></i> Back to loan
+        </a>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,46 @@
+{% extends 'master.html' %} {% load static %} {% block content %}
+<h1>Your Loans</h1>
+<a href="{% url 'loans:apply_loan' %}" class="btn btn-primary"> Apply Loan</a>
+
+{% if loans %}
+<p>You have {{ loans|length }} loan(s).</p>
+{% else %}
+<p>You have no loans.</p>
+{% endif %}
+<table class="table mt-4">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Amount</th>
+      <th>Interest</th>
+      <th>Term</th>
+      <th>Balance</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for loan in loans %}
+    <tr>
+      <td>{{ loan.id }}</td>
+      <td>{{ loan.amount }}</td>
+      <td>{{ loan.interest_rate }}%</td>
+      <td>{{ loan.term_months }} months</td>
+      <td>{{ loan.balance|floatformat:2 }}</td>
+      <td>{{ loan.get_status_display }}</td>
+      <td>
+        <a
+          href="{% url 'loans:loan_detail' loan.id %}"
+          class="btn btn-sm btn-info"
+          >View</a
+        >
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="7" class="text-center">No loans available.</td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
