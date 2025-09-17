@@ -1,0 +1,27 @@
+{% extends "master.html" %}
+
+
+    {% block title %}
+    List of all members
+    {% endblock %}
+    
+    
+    {% block content %}
+    <h1>All Members</h1>
+    <div class="container mt-5">
+    <div class="mycard">
+        <h1>Members</h1> 
+        <p>Click on a member to view their details.</p>
+        <hr>
+        <br>
+        
+        <p> </p>
+        <ul>
+            {% for x in mymembers %}
+            <li onclick="window.location= 'details/{{ x.slug }}'">{{ x.first_name }}  {{ x.last_name }}  </a></li>
+            
+            {% endfor %}
+        </ul>
+    </div>
+    
+    {% endblock %}

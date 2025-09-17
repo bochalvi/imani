@@ -1,0 +1,37 @@
+{% extends 'master.html' %} {% block title %} Details about {{
+mymember.first_name }} {{ mymember.last_name }} {% endblock %} {% load static %}
+{% block content %}
+
+<h1>Member Details</h1>
+<div class="container mt-5">
+  <p>View details about the member and their loan applications.</p>
+  <p>Mpesa Account <a href="tel:+254708419101">+254708419101</a></p>
+  <div class="mycard">
+    <h1>{{ mymember.first_name }} {{ mymember.last_name }}</h1>
+    <hr />
+    <br />
+    <p>Member ID: {{ mymember.member_id }}</p>
+    <p>ID NO: {{ mymember.id_number}}</p>
+    <p>Phone NO: {{ mymember.phone }}</p>
+    <p>Member since: {{ mymember.date_joined }}</p>
+    <p>Email: {{ mymember.email}}</p>
+    <br />
+    <hr />
+    <br />
+    <a href=""
+      ><button type="button" class="btn btn-secondary">
+        Apply for Loan
+      </button></a
+    >
+
+    <br />
+    <br />
+    <br />
+    <p>Back to <a href="{% url 'members' %}"> Members</a></p>
+    <a href="{% url 'loans:apply_loan' %}" class="btn btn-primary">
+      Apply New Loan</a
+    >
+  </div>
+</div>
+
+{% endblock %}

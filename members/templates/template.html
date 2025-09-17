@@ -1,0 +1,39 @@
+{% extends 'master.html' %}
+{% block content %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'imani.css' %}">
+        <title>imani group</title>
+</head>
+<body>
+    <table border='1'>
+        <tr>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Phone Number</th> 
+          <th>Type</th>
+         
+
+        </tr>
+        {% for x in mymember %}
+          <tr>
+            <td>{{ x.id }}</td>
+            <td>{{ x.first_name }}</td>
+            <td>{{ x.last_name }}</td>
+            <td>{{ x.phone_number }}</td>
+            <td>{{ x.type }}</td>
+            <td></td>
+            <td><a href="{% url 'update' x.id %}">Update</a></td>
+          </tr>
+          
+        {% endfor %}
+      </table>
+</body>
+</html>
+{% endblock %}
